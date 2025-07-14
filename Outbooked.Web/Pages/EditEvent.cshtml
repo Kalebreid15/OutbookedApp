@@ -1,0 +1,45 @@
+﻿@page "{id:guid}"
+@model EditEventModel
+
+<h2>Edit Event</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="EditableEvent.Id" />
+
+    <div class="mb-3">
+        <label asp-for="EditableEvent.ClientName" class="form-label">Client Name</label>
+        <input asp-for="EditableEvent.ClientName" class="form-control" />
+        <span asp-validation-for="EditableEvent.ClientName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EditableEvent.Location" class="form-label">Location</label>
+        <input asp-for="EditableEvent.Location" class="form-control" />
+        <span asp-validation-for="EditableEvent.Location" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EditableEvent.StartTime" class="form-label">Start Time</label>
+        <input asp-for="EditableEvent.StartTime" class="form-control" type="datetime-local" />
+        <span asp-validation-for="EditableEvent.StartTime" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EditableEvent.EndTime" class="form-label">End Time</label>
+        <input asp-for="EditableEvent.EndTime" class="form-control" type="datetime-local" />
+        <span asp-validation-for="EditableEvent.EndTime" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EditableEvent.Status" class="form-label">Status</label>
+        <select asp-for="EditableEvent.Status" class="form-select">
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
+        <span asp-validation-for="EditableEvent.Status" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-page="/Events" class="btn btn-secondary ms-2">Cancel</a>
+</form>

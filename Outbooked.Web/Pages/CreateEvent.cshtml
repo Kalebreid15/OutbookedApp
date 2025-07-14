@@ -1,0 +1,45 @@
+﻿@page
+@model CreateEventModel
+
+<h2>Create New Event</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="NewEvent.ClientName" class="form-label">Client Name</label>
+        <input asp-for="NewEvent.ClientName" class="form-control" />
+        <span asp-validation-for="NewEvent.ClientName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NewEvent.Location" class="form-label">Location</label>
+        <input asp-for="NewEvent.Location" class="form-control" />
+        <span asp-validation-for="NewEvent.Location" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NewEvent.StartTime" class="form-label">Start Time</label>
+        <input asp-for="NewEvent.StartTime" class="form-control" type="datetime-local"
+               value="@Model.NewEvent.StartTime.ToString("yyyy-MM-ddTHH:mm")" />
+        <span asp-validation-for="NewEvent.StartTime" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NewEvent.EndTime" class="form-label">End Time</label>
+        <input asp-for="NewEvent.EndTime" class="form-control" type="datetime-local"
+               value="@Model.NewEvent.EndTime.ToString("yyyy-MM-ddTHH:mm")" />
+        <span asp-validation-for="NewEvent.EndTime" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NewEvent.Status" class="form-label">Status</label>
+        <select asp-for="NewEvent.Status" class="form-select">
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
+        <span asp-validation-for="NewEvent.Status" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Create Event</button>
+    <a asp-page="/Events" class="btn btn-secondary ms-2">Cancel</a>
+</form>

@@ -1,0 +1,42 @@
+Outbooked
+Outbooked is a structured, responsive event management system built using Razor Pages and Bootstrap. It supports full CRUD operations, conflict detection logic, mock syncing for Outlook, and unit testing — all powered by a shared in-memory data store.
+
+Features
+- Create, edit, delete, and view events
+- Built-in conflict detection via TripleSeatService
+- Mock syncing via OutlookSyncService with future Graph API integration
+- Responsive dashboard with status badges and toast confirmations
+- Dashboard filtering by status (Confirmed, Pending, Cancelled)
+- Unit tests using xUnit in Outbooked.Tests
+
+Tech Stack
+| Layer | Tools and Frameworks | 
+| Backend | C#, Razor Pages (.NET 8), Dependency Injection | 
+| Services | EventRepository, TripleSeatService, OutlookSyncService | 
+| Testing | xUnit with mock integration | 
+| UI / UX | Bootstrap 5, Razor Pages | 
+| Environment | Visual Studio, .NET SDK | 
+
+
+
+Setup Instructions
+- Clone the repository
+git clone https://github.com/yourusername/OutbookedApp
+- Open in Visual Studio and build the solution
+- Navigate to /Events — all functionality runs through Razor Pages
+- Sample event data is preloaded via EventRepository for testing
+
+Future Development
+- Outlook calendar integration using Microsoft Graph API
+- Azure hosting with secure authentication
+- Database persistence using EF Core or similar
+- Calendar visualizations and export functionality
+
+Testing Overview
+Unit tests cover:
+- Conflict detection logic in TripleSeatService
+- Sync simulation in OutlookSyncService
+Run tests via Visual Studio's Test Explorer
+Test project: Outbooked.Tests
+
+

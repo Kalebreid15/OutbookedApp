@@ -1,26 +1,30 @@
+﻿using Outbooked.API.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 🔧 Register backend services for DI
+builder.Services.AddSingleton<EventRepository>(); // Centralized event store
+builder.Services.AddScoped<TripleSeatService>();
+builder.Services.AddScoped<OutlookSyncService>();
+
+// Razor Pages setup
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
+// Configure middleware
 app.UseHttpsRedirection();
-
+app.UseStaticFiles();
 app.UseRouting();
 
-app.UseAuthorization();
+// 🔁 Redirect root ("/") to /Events
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/Events");
+    return Task.CompletedTask;
+});
 
-app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
+// Map Razor Pages (no controllers yet)
+app.MapRazorPages();
 
 app.Run();
