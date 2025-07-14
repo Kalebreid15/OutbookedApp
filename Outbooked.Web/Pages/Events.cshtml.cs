@@ -15,6 +15,13 @@ public class EventsModel(EventRepository eventRepository, OutlookSyncService out
     [BindProperty(SupportsGet = true)]
     public string Filter { get; set; } = "All";
 
+    // Grouped lists for sectioned UI
+    public List<CalendarEvent> LeadEvents => [.. Events.Where(e => e.Status == "Lead")];
+    public List<CalendarEvent> PendingEvents => [.. Events.Where(e => e.Status == "Pending")];
+    public List<CalendarEvent> ConfirmedEvents => [.. Events.Where(e => e.Status == "Confirmed")];
+    public List<CalendarEvent> CancelledEvents => [.. Events.Where(e => e.Status == "Cancelled")];
+    public List<CalendarEvent> SyncedEvents => [.. Events.Where(e => e.Status == "Synced")];
+
     public Task OnGetAsync()
     {
         var allEvents = _eventRepository.GetAll();
@@ -49,7 +56,6 @@ public class EventsModel(EventRepository eventRepository, OutlookSyncService out
     {
         var allEvents = _eventRepository.GetAll();
 
-        // Snapshot to avoid modifying during iteration
         foreach (var evt in allEvents.Where(e => e.Status != "Synced").ToList())
         {
             var success = await _outlookSyncService.SyncEventAsync(evt);

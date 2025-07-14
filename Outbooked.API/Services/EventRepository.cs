@@ -13,8 +13,8 @@ public class EventRepository
 
     public EventRepository()
     {
-        _events = new()
-        {
+        _events =
+        [
             new() {
                 Id = Guid.Parse("07101055-7931-433f-a447-5a8376c54ba8"),
                 ClientName = "Sunset Catering Co.",
@@ -29,9 +29,9 @@ public class EventRepository
                 Location = "Rooftop Terrace",
                 StartTime = DateTime.Today.AddHours(18),
                 EndTime = DateTime.Today.AddHours(21),
-                Status = "Lead"
+                Status = "Pending"
             }
-        };
+        ];
     }
 
     public List<CalendarEvent> GetAll() => _events;
