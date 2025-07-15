@@ -6,6 +6,13 @@ public class TripleSeatService(EventRepository repository)
 {
     private readonly EventRepository _repository = repository;
 
+    public static bool ConflictExists(CalendarEvent existing, CalendarEvent incoming)
+    {
+        return existing.Id != incoming.Id &&
+           existing.StartTime < incoming.EndTime &&
+           incoming.StartTime < existing.EndTime;
+    }
+
     public async Task<bool> IsOverlappingAsync(CalendarEvent incoming)
     {
         var existingEvents = _repository.GetAll();

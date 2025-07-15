@@ -9,7 +9,7 @@ namespace Outbooked.API.Services;
 
 public class OutlookSyncService
 {
-    public async Task<bool> SyncEventAsync(CalendarEvent evt)
+    public static async Task<bool> SyncEventAsync(CalendarEvent evt)
     {
         await Task.Delay(200); // Simulate latency
         Console.WriteLine($"[SYNC] {evt.ClientName} successfully synced to Outlook");

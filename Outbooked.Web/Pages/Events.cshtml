@@ -1,110 +1,63 @@
 ﻿@page
 @model EventsModel
-
-<h2 class="mb-4">📅 Upcoming Events</h2>
-
-<!-- Toast container for sync/create feedback -->
-<div aria-live="polite" aria-atomic="true" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-    <div id="syncToast" class="toast bg-primary text-white w-auto" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-body fw-bold">
-            🔄 All events synced successfully!
-        </div>
-    </div>
-    <div id="createToast" class="toast bg-success text-white w-auto" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-body fw-bold">
-            ✅ New event created successfully!
-        </div>
-    </div>
-</div>
-
-<!-- Filter dropdown and sync button -->
-<div class="d-flex flex-wrap gap-2 mb-4">
-    <form method="get">
-        <select asp-for="Filter" class="form-select form-select-sm" onchange="this.form.submit()">
-            <option value="All">All</option>
-            <option value="Pending">Pending</option>
-            <option value="Confirmed">Confirmed</option>
-            <option value="Cancelled">Cancelled</option>
-            <option value="Lead">Lead</option>
-        </select>
-    </form>
-
-    <form method="post" asp-page-handler="SyncAll">
-        <button type="submit" class="btn btn-sm btn-outline-primary">Sync All</button>
-    </form>
-
-    <a asp-page="/CreateEvent" class="btn btn-sm btn-success">➕ New Event</a>
-</div>
-
-<!-- Events Table -->
-<div class="table-responsive">
-    <table class="table table-hover table-bordered align-middle">
-        <thead class="table-light">
-            <tr>
-                <th>Client</th>
-                <th>Location</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var evt in Model.Events)
-            {
-                <tr>
-                    <td>@evt.ClientName</td>
-                    <td>@evt.Location</td>
-                    <td>@evt.StartTime.ToString("g")</td>
-                    <td>@evt.EndTime.ToString("g")</td>
-                    <td>
-                        <span class="badge bg-@GetStatusColor(evt.Status)">
-                            @evt.Status
-                        </span>
-                    </td>
-                    <td>
-                        <div class="d-flex flex-wrap gap-2">
-                            <a asp-page="/EditEvent" asp-route-id="@evt.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
-                            <form method="post" asp-page-handler="Sync" asp-route-id="@evt.Id">
-                                <button type="submit" class="btn btn-sm btn-outline-success">Sync</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
-@functions {
-    public string GetStatusColor(string status) => status switch
-    {
-        "Confirmed" => "success",
-        "Pending" => "warning text-dark",
-        "Cancelled" => "secondary",
-        "Lead" => "info",
-        "Synced" => "primary",
-        _ => "light"
-    };
+@{
+    ViewData["Title"] = "All Events";
 }
+
+<h2>Upcoming Events</h2>
+<a asp-page="/CreateEvent" class="btn btn-success mb-3">+ Add New Event</a>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Client</th>
+            <th>Location</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var evt in Model.AllEvents)
+        {
+            <tr>
+                <td>@evt.ClientName</td>
+                <td>@evt.Location</td>
+                <td>@evt.StartTime.ToString("g")</td>
+                <td>@evt.EndTime.ToString("g")</td>
+                <td>
+                    <a asp-page="/EditEvent" asp-route-id="@evt.Id" class="btn btn-sm btn-primary">Edit</a>
+                    <a asp-page="/DeleteEvent" asp-route-id="@evt.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @section Scripts {
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const syncTrigger = '@TempData["ShowSyncToast"]';
-            const createTrigger = '@TempData["ShowCreateToast"]';
+        window.onload = function () {
+            var msg = '@TempData["ToastMessage"]';
+            if (msg) showToast(msg);
+        };
 
-            if (syncTrigger === 'true') {
-                const toastEl = document.getElementById('syncToast');
-                const toast = new bootstrap.Toast(toastEl);
-                toast.show();
-            }
-
-            if (createTrigger === 'true') {
-                const toastEl = document.getElementById('createToast');
-                const toast = new bootstrap.Toast(toastEl);
-                toast.show();
-            }
-        });
+        function showToast(message) {
+            const toast = document.createElement("div");
+            toast.innerHTML = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #333;
+                color: #fff;
+                padding: 12px 20px;
+                border-radius: 5px;
+                z-index: 9999;
+                font-size: 14px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
     </script>
 }
