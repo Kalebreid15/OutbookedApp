@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 using Outbooked.API.Models;
 using Outbooked.API.Services;
 
 namespace Outbooked.Web.Pages;
 
-public class CreateEventModel(TripleSeatService tripleSeatService) : PageModel
+
+public class CreateEventModel(EventRepository repository, TripleSeatService tripleSeatService) : PageModel
 {
+    private readonly EventRepository _repository = repository;
     private readonly TripleSeatService _tripleSeatService = tripleSeatService;
 
     [BindProperty]
@@ -14,25 +17,25 @@ public class CreateEventModel(TripleSeatService tripleSeatService) : PageModel
 
     public void OnGet()
     {
-        NewEvent.StartTime = DateTime.Now.AddHours(1).AddMinutes(-(DateTime.Now.AddHours(1).Minute % 15)); // rounded to nearest 15
-        NewEvent.EndTime = NewEvent.StartTime.AddHours(1);
+        var now = DateTime.Now;
+        NewEvent.StartTime = now;
+        NewEvent.EndTime = now.AddHours(1);
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid)
-            return Page();
+        if (!ModelState.IsValid) return Page();
 
-        bool hasConflict = await _tripleSeatService.IsOverlappingAsync(NewEvent);
-
-        if (hasConflict)
+        // 🛑 Overlap detection
+        if (await _tripleSeatService.IsOverlappingAsync(NewEvent))
         {
-            TempData["ToastMessage"] = "⚠️ Overlapping event detected. Please reschedule.";
-            return Page(); // preserve form data and show error toast
+            TempData["ToastError"] = "This event overlaps with an existing one.";
+            return Page();
         }
 
-        await _tripleSeatService.SaveEventAsync(NewEvent);
-        TempData["ToastMessage"] = "✅ Event created successfully!";
-        return RedirectToPage("Events");
+
+        _repository.Add(NewEvent);
+        TempData["ToastMessage"] = "Event created successfully!";
+        return RedirectToPage("/Events");
     }
 }

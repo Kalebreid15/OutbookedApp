@@ -16,16 +16,16 @@
     <input type="hidden" asp-for="TargetEvent.EndTime" />
 
     <div class="mb-3">
-        <strong>Client:</strong> @Model.TargetEvent.ClientName
+        <strong>Client:</strong> @(Model.TargetEvent?.ClientName ?? "N/A")
     </div>
     <div class="mb-3">
-        <strong>Location:</strong> @Model.TargetEvent.Location
+        <strong>Location:</strong> @(Model.TargetEvent?.Location ?? "N/A")
     </div>
     <div class="mb-3">
-        <strong>Start Time:</strong> @Model.TargetEvent.StartTime.ToString("g")
+        <strong>Start Time:</strong> @(Model.TargetEvent?.StartTime.ToString("g") ?? "N/A")
     </div>
     <div class="mb-3">
-        <strong>End Time:</strong> @Model.TargetEvent.EndTime.ToString("g")
+        <strong>End Time:</strong> @(Model.TargetEvent?.EndTime.ToString("g") ?? "N/A")
     </div>
     <button type="submit" class="btn btn-danger">Delete</button>
     <a asp-page="/Events" class="btn btn-secondary">Cancel</a>

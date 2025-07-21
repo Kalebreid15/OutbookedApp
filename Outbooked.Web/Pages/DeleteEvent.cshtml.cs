@@ -1,31 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 using Outbooked.API.Models;
 using Outbooked.API.Services;
 
 namespace Outbooked.Web.Pages;
+
 
 public class DeleteEventModel(EventRepository repository) : PageModel
 {
     private readonly EventRepository _repository = repository;
 
     [BindProperty]
-    public CalendarEvent TargetEvent { get; set; } = new();
+    public CalendarEvent? TargetEvent { get; set; }
 
     public IActionResult OnGet(Guid id)
     {
-        var evt = _repository.GetById(id);
-        if (evt is null) return NotFound();
-
-        TargetEvent = evt;
+        TargetEvent = _repository.GetById(id);
+        if (TargetEvent is null) return RedirectToPage("/Events");
         return Page();
     }
 
-    public IActionResult OnPost()
+    public IActionResult OnPost(Guid id)
     {
-        Console.WriteLine($"[DELETE] Deleting ID: {TargetEvent.Id}");
-        _repository.Remove(TargetEvent.Id);
-        TempData["ToastMessage"] = "🗑️ Event deleted successfully!";
+        _repository.Remove(id);
+        TempData["ToastMessage"] = "Event deleted successfully!";
         return RedirectToPage("/Events");
     }
 }

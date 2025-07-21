@@ -22,12 +22,16 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-page="/Events">Events</a>
                         </li>
-                        <!-- Add more tabs here as needed -->
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
+    <!-- ✅ Toast Container -->
+    <div id="toast" style="display:none; position:fixed; top:20px; right:20px; background-color:#f44336; color:white; padding:10px 20px; border-radius:5px; z-index:9999;">
+        <span id="toast-message"></span>
+    </div>
 
     <main role="main" class="container">
         @RenderBody()
@@ -42,6 +46,20 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js"></script>
+
+    <!-- ✅ Toast Function Script -->
+    <script>
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            const messageBox = document.getElementById("toast-message");
+            messageBox.innerText = message;
+            toast.style.display = "block";
+            setTimeout(() => {
+                toast.style.display = "none";
+            }, 4000);
+        }
+    </script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

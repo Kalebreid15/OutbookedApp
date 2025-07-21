@@ -6,6 +6,14 @@
 <form method="post">
     <input type="hidden" asp-for="EditableEvent.Id" />
 
+    @* 🛑 Show overlap error from ModelState *@
+    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ContainsKey("") && ViewData.ModelState[""]?.Errors?.FirstOrDefault() != null)
+    {
+        <div class="alert alert-danger">
+            @ViewData.ModelState[""]!.Errors.FirstOrDefault()!.ErrorMessage
+        </div>
+    }
+
     <div class="mb-3">
         <label asp-for="EditableEvent.ClientName" class="form-label">Client Name</label>
         <input asp-for="EditableEvent.ClientName" class="form-control" />
@@ -20,13 +28,23 @@
 
     <div class="mb-3">
         <label asp-for="EditableEvent.StartTime" class="form-label">Start Time</label>
-        <input asp-for="EditableEvent.StartTime" class="form-control" type="datetime-local" />
+        <input asp-for="EditableEvent.StartTime"
+               class="form-control"
+               type="datetime-local"
+               value="@((Model.EditableEvent?.StartTime != null)
+                                                      ? Model.EditableEvent.StartTime.ToString("yyyy-MM-ddTHH:mm")
+                                                      : string.Empty)" />
         <span asp-validation-for="EditableEvent.StartTime" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label asp-for="EditableEvent.EndTime" class="form-label">End Time</label>
-        <input asp-for="EditableEvent.EndTime" class="form-control" type="datetime-local" />
+        <input asp-for="EditableEvent.EndTime"
+               class="form-control"
+               type="datetime-local"
+               value="@((Model.EditableEvent?.EndTime != null)
+                                                      ? Model.EditableEvent.EndTime.ToString("yyyy-MM-ddTHH:mm")
+                                                      : string.Empty)" />
         <span asp-validation-for="EditableEvent.EndTime" class="text-danger"></span>
     </div>
 

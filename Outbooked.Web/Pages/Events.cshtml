@@ -1,10 +1,31 @@
 ﻿@page
 @model EventsModel
+
+@functions {
+    public string GetBadgeClass(string status) => status switch
+    {
+        "Lead" => "bg-info",
+        "Pending" => "bg-warning",
+        "Confirmed" => "bg-success",
+        "Cancelled" => "bg-danger",
+        "Synced" => "bg-primary",
+        _ => "bg-secondary"
+    };
+}
+
 @{
     ViewData["Title"] = "All Events";
 }
 
-<h2>Upcoming Events</h2>
+<!-- 🗓️ Header with Sync Button -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    <h2>Upcoming Events</h2>
+
+    <form method="post" asp-page-handler="SyncOutlook">
+        <button type="submit" class="btn btn-outline-secondary">Sync Outlook</button>
+    </form>
+</div>
+
 <a asp-page="/CreateEvent" class="btn btn-success mb-3">+ Add New Event</a>
 
 <table class="table table-striped mt-3">
@@ -14,6 +35,7 @@
             <th>Location</th>
             <th>Start Time</th>
             <th>End Time</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -25,6 +47,9 @@
                 <td>@evt.Location</td>
                 <td>@evt.StartTime.ToString("g")</td>
                 <td>@evt.EndTime.ToString("g")</td>
+                <td>
+                    <span class="badge @GetBadgeClass(evt.Status)">@evt.Status</span>
+                </td>
                 <td>
                     <a asp-page="/EditEvent" asp-route-id="@evt.Id" class="btn btn-sm btn-primary">Edit</a>
                     <a asp-page="/DeleteEvent" asp-route-id="@evt.Id" class="btn btn-sm btn-danger">Delete</a>

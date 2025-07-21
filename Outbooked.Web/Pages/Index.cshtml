@@ -1,10 +1,13 @@
 ﻿@page
-@model IndexModel
+
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Welcome to Outbooked";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- 👇 Add a soft background and centered layout -->
+<div style="background-color: #f8f9fa; padding: 60px 20px; border-radius: 12px;" class="text-center mt-5 shadow-sm">
+    <h1 class="display-4 fw-bold mb-3">Outbooked</h1>
+    <p class="lead text-muted mb-4">Your events, streamlined and conflict-free. Manage bookings with clarity and confidence.</p>
+
+    <a asp-page="/Events" class="btn btn-primary btn-lg">View Events</a>
 </div>
